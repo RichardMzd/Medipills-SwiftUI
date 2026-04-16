@@ -6,9 +6,16 @@
 //
 
 import SwiftUI
+import UserNotifications
+
 
 @main
 struct MedipillsApp: App {
+    
+    init() {
+        UserDefaults.standard.removeObject(forKey: "username")
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
