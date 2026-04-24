@@ -5,14 +5,11 @@
 //  Created by Richard Arif Mazid on 12/03/2026.
 //
 
-
-import SwiftUI
-
-
 import SwiftUI
 
 struct DetailsView: View {
     let medication: MedicationItem
+    
     @Environment(\.dismiss) var dismiss
 
     static let dateFormatter: DateFormatter = {
@@ -24,7 +21,7 @@ struct DetailsView: View {
 
     var body: some View {
         ScrollView(showsIndicators: false) {
-            if let formEnum = MedicationForm(rawValue: medication.form) {
+            if let formEnum = MedicationForm(rawValue: medication.form ?? "") {
                 let doseText = formEnum.finalDoseText(value: medication.doseValue)
 
                 VStack(spacing: 0) {
@@ -40,12 +37,12 @@ struct DetailsView: View {
                         }
                         .shadow(color: .gray.opacity(0.8), radius: 5, x: 0, y: 5)
 
-                        Text(medication.name)
+                        Text(medication.name ?? "")
                             .font(.custom("Poppins-Bold", size: 22))
                             .multilineTextAlignment(.center)
 
                         // Badge forme
-                        Text(medication.form)
+                        Text(medication.form ?? "")
                             .font(.custom("Poppins-Bold", size: 12))
                             .foregroundStyle(.white)
                             .padding(.horizontal, 14)
@@ -65,11 +62,18 @@ struct DetailsView: View {
                         SectionTitle(title: "Informations")
 
                         VStack(spacing: 1) {
-                            DetailsRow(icon: "pills.fill",   label: "Dosage",        value: doseText)
-                            DetailsRow(icon: "clock.fill",   label: "Moment",        value: medication.moment.rawValue)
-                            DetailsRow(icon: "fork.knife",   label: "Repas",         value: formEnum.beforeOfAfterMeal(value: medication.isBeforeMeal))
-                            DetailsRow(icon: "repeat",       label: "Fréquence",     value: medication.frequency.rawValue)
-                            DetailsRow(icon: "calendar",     label: "Date de début", value: DetailsView.dateFormatter.string(from: medication.startDate))
+                            DetailsRow(icon: "pills.fill", label: "Dosage", value: doseText)
+                            DetailsRow(icon: "clock.fill", label: "Moment", value: medication.moment ?? "")
+                            DetailsRow(icon: "fork.knife", label: "Repas", value: formEnum.beforeOfAfterMeal(value: medication.isBeforeMeal))
+                            DetailsRow(icon: "repeat", label: "Fréquence", value: medication.frequency ?? "")
+                            DetailsRow(
+                                icon: "calendar",
+                                label: "Date de début",
+                                value: DetailsView.dateFormatter
+                                    .string(
+                                        from: medication.startDate ?? Date()
+                                    )
+                            )
                         }
                         .background(Color.white)
                         .clipShape(RoundedRectangle(cornerRadius: 16))
@@ -79,7 +83,7 @@ struct DetailsView: View {
                     }
 
                     // ── NOTES ─────────────────────────────────────────
-                    if !medication.notes.isEmpty {
+                    if !(medication.notes ?? "").isEmpty {
                         VStack(spacing: 0) {
                             SectionTitle(title: "Notes")
 
@@ -91,7 +95,7 @@ struct DetailsView: View {
                                     .background(Color.aliceBlue)
                                     .clipShape(RoundedRectangle(cornerRadius: 9))
 
-                                Text(medication.notes)
+                                Text(medication.notes ?? "")
                                     .font(.custom("Inter", size: 14))
                                     .foregroundStyle(.dimGrey)
                                     .fixedSize(horizontal: false, vertical: true)
@@ -160,17 +164,6 @@ private struct SectionTitle: View {
 
 #Preview {
     NavigationStack {
-        DetailsView(medication: .init(
-            name: "Doliprane",
-            doseValue: 2,
-            form: "Comprimé",
-            moment: DayMoment.morning,
-            isBeforeMeal: true,
-            frequency: FrequencyForm.everyDay,
-            startDate: Date(),
-            notes: "Prendre si douleurs",
-            reminderEnabled: true,
-            reminderTime: Date()
-        ))
+        DetailsView(medication: MedicationItem(context: PersistenceController.shared.context))
     }
 }

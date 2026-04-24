@@ -10,7 +10,9 @@ import SwiftUI
 struct HomePageView: View {
     
     @AppStorage("username") var username: String = ""
-    @ObservedObject var medicationVM = MedicationViewModel()
+    @Environment(\.managedObjectContext) private var context
+    @EnvironmentObject var medicationVM: MedicationViewModel
+    
     @State private var showAddMedicationSheet = false
     @State private var selectedDate: Date? = Calendar.current.startOfDay(for: Date())
     @State private var selectedMedication: MedicationItem? = nil
@@ -148,7 +150,7 @@ struct HomePageView: View {
                                                 
                                                 VStack(alignment: .leading, spacing: 10) {
                                                     ForEach(meds) { med in
-                                                        if let formEnum = MedicationForm(rawValue: med.form) {
+                                                        if let formEnum = MedicationForm(rawValue: med.form ?? "") {
                                                             let doseText = formEnum.finalDoseText(value: med.doseValue)
                                                             let beforeOrAfter = formEnum.beforeOfAfterMeal(value: med.isBeforeMeal)
                                                             
@@ -160,15 +162,15 @@ struct HomePageView: View {
                                                                     isLongPressing = false
                                                                 } label: {
                                                                     MedicationView(
-                                                                        name: med.name,
+                                                                        name: med.name ?? "",
                                                                         doseValue: med.doseValue,
                                                                         form: formEnum,
                                                                         doseText: doseText,
-                                                                        moment: med.moment,
+                                                                        moment: DayMoment(rawValue: med.moment ?? "") ?? .morning,
                                                                         isBeforeMeal: beforeOrAfter,
-                                                                        startDate: med.startDate,
+                                                                        startDate: med.startDate ?? Date(),
                                                                         currentDate: Date(),
-                                                                        frequency: med.frequency,
+                                                                        frequency: FrequencyForm(rawValue: med.frequency ?? "") ?? .everyDay,
                                                                         isTaken: medicationVM.isTaken(med, on: date)
                                                                     )
                                                                 }

@@ -28,13 +28,13 @@ final class AddMedicationViewModel: ObservableObject {
     
     init(medication: MedicationItem? = nil) {
         if let med = medication {
-            self.name = med.name
+            self.name = med.name ?? ""
             self.doseValue = med.doseValue
-            self.selectedForm = MedicationForm(rawValue: med.form) ?? .comprime
-            self.selectedMoment = med.moment
+            self.selectedForm = MedicationForm(rawValue: med.form ?? "") ?? .comprime
+            self.selectedMoment = DayMoment(rawValue: med.moment ?? "") ?? .morning
             self.isBeforeMeal = med.isBeforeMeal
-            self.selectedFrequency = med.frequency
-            self.startDate = med.startDate
+            self.selectedFrequency = FrequencyForm(rawValue: med.frequency ?? "") ?? .everyDay
+            self.startDate = med.startDate ?? Date()
         }
     }
 

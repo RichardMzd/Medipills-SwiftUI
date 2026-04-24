@@ -15,6 +15,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
+				Medipills.xcdatamodeld,
 			);
 			target = 5311F5D62DBB9A7100FD2F8B /* Medipills */;
 		};

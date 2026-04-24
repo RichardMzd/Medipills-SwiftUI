@@ -7,18 +7,17 @@
 
 import SwiftUI
 import UserNotifications
-
+import CoreData
 
 @main
 struct MedipillsApp: App {
     
-    init() {
-        UserDefaults.standard.removeObject(forKey: "username")
-    }
+    let persistenceController = PersistenceController.shared
     
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(\.managedObjectContext, persistenceController.context)
         }
     }
 }
