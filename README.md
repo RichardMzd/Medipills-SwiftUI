@@ -69,5 +69,5 @@ open Medipills.xcodeproj
 
 ## Author
 
-**Richard Mazid** — Junior iOS Developer  
-[LinkedIn](https://www.linkedin.com/in/richard-mazid) · [GitHub](https://github.com/RichardMzd)
+**Richard Mazid** — iOS Developer  
+[LinkedIn](https://www.linkedin.com/in/richard-mazid)
