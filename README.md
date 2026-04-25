@@ -27,9 +27,7 @@
 - 💊 Add and manage your medications with custom schedules
 - 🔔 Local notifications & snooze reminders
 - 📋 Track your intake history
-- 🔒 Face ID / Touch ID to protect your data
-- 📤 Export your history as PDF
-- 🌙 Light & Dark mode support
+- 🌙 Light & Dark mode support (Comming soon)
 
 ---
 
@@ -41,7 +39,6 @@
 | **Architecture** | MVVM |
 | **Persistence** | SwiftData |
 | **Notifications** | UserNotifications |
-| **Security** | LocalAuthentication (Face ID / Touch ID) |
 
 ---
 
