@@ -1,6 +1,6 @@
 # Medipills 💊
 
-> A clean and simple medication tracker — built with SwiftUI, available on the App Store.
+> A clean and simple medication tracker — built with SwiftUI, soon available on the App Store.
 
 ![Swift](https://img.shields.io/badge/Swift-5.9-orange?logo=swift)
 ![iOS](https://img.shields.io/badge/iOS-16%2B-blue?logo=apple)
@@ -11,16 +11,15 @@
 
 ## Screenshots
 
-<!-- Add your screenshots here -->
-<!-- Example:
 <p align="center">
-  <img src="Screenshots/home.png" width="200"/>
-  <img src="Screenshots/add_medication.png" width="200"/>
-  <img src="Screenshots/settings.png" width="200"/>
+  <img width="220" alt="Home" src="https://github.com/user-attachments/assets/e3143326-8b00-4545-9395-26b9deb354d2" />
+  &nbsp;&nbsp;&nbsp;
+  <img width="220" alt="Add medication" src="https://github.com/user-attachments/assets/7dca25c5-4bc2-41a7-8678-0c740ed040ff" />
+  &nbsp;&nbsp;&nbsp;
+  <img width="220" alt="Settings" src="https://github.com/user-attachments/assets/c38464b3-1c2b-4fd4-bc5b-e96212a9a315" />
 </p>
--->
 
----
+
 
 ## Features
 
