@@ -36,7 +36,7 @@
 |---|---|
 | **UI** | SwiftUI |
 | **Architecture** | MVVM |
-| **Persistence** | SwiftData |
+| **Persistence** | CoreData |
 | **Notifications** | UserNotifications |
 
 ---
