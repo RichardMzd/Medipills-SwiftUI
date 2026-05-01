@@ -20,6 +20,20 @@ struct DateCircleView: View {
     private var isToday: Bool {
         Calendar.current.isDateInToday(date)
     }
+    
+    static let dateFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.setLocalizedDateFormatFromTemplate("d")
+        f.locale = Locale(identifier: "fr_FR")
+        return f
+    }()
+    
+    static let dayFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "EEE"
+        f.locale = Locale(identifier: "fr_FR")
+        return f
+    }()
 
     var body: some View {
         Button(action: {
@@ -27,12 +41,15 @@ struct DateCircleView: View {
         }) {
             VStack(spacing: 8) {
                 // Jour de la semaine - TOUJOURS VISIBLE
-                Text(HomePageView.dayFormatter.string(from: date).prefix(3).capitalized)
+                Text(DateCircleView.dayFormatter
+                        .string(from: date)
+                        .prefix(3).capitalized
+                )
                     .font(.custom("Inter", size: 12))
                     .foregroundColor(.gray)  // Toujours gris
                 
                 // Numéro du jour
-                Text(HomePageView.dateFormatter.string(from: date))
+                Text(DateCircleView.dateFormatter.string(from: date))
                     .font(.custom("Poppins-SemiBold", size: 18))
                     .foregroundColor(isSelected ? .white : .black)
                     .frame(width: 44, height: 44)

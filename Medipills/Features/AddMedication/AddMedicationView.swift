@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AddMedicationView: View {
-
+    
     @Environment(\.dismiss) private var dismiss
     @StateObject private var vm : AddMedicationViewModel
     var medicationToEdit: MedicationItem? = nil
@@ -31,7 +31,7 @@ struct AddMedicationView: View {
         _vm = StateObject(wrappedValue: AddMedicationViewModel(medication: medicationToEdit))
         self.addMedicationAction = addMedicationAction
     }
-
+    
     var addMedicationAction: (
         _ name: String,
         _ doseValue: Double,
@@ -44,30 +44,68 @@ struct AddMedicationView: View {
         _ reminderEnabled: Bool,
         _ reminderTime: Date
     ) -> Void
-
+    
+    var submitButton: some View {
+        Button {
+            guard vm.validate() else { return }
+            addMedicationAction(
+                vm.name,
+                vm.doseValue,
+                vm.selectedForm.rawValue,
+                vm.startDate,
+                vm.selectedMoment,
+                vm.isBeforeMeal,
+                vm.selectedFrequency,
+                vm.notes,
+                vm.reminderEnabled,
+                vm.reminderTime
+            )
+            dismiss()
+        } label: {
+            Text("Ajouter")
+                .font(.custom("Poppins-Bold", size: 16))
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.icyBlue)
+                .clipShape(Capsule())
+        }
+        .padding(20)
+        .alert("Erreur", isPresented: .constant(vm.currentError != nil)) {
+            Button("OK", role: .cancel) { vm.currentError = nil }
+        } message: {
+            switch vm.currentError {
+            case .emptyName: Text("Veuillez entrer le nom du médicament")
+            case .emptyDosage: Text("Veuillez ajouter un dosage")
+            case .none: EmptyView()
+            }
+        }
+        
+    }
+    
     var body: some View {
         VStack {
             Spacer()
-
+            
             VStack {
                 Capsule()
                     .fill(Color.gray.opacity(0.3))
                     .frame(width: 40, height: 5)
                     .padding(.top, 8)
-
+                
                 Text("Ajouter un médicament")
                     .font(.custom("Poppins-Bold", size: 20))
                     .padding(.vertical, 20)
-
+                
                 ScrollView(showsIndicators: false) {
                     VStack(alignment: .leading, spacing: 10) {
-
+                        
                         LabeledCapsuleTextField(
                             title: "Nom du médicament",
                             placeholder: "Ex : Doliprane",
                             text: $vm.name
                         )
-
+                        
                         HStack(alignment: .top, spacing: 12) {
                             DosageField(
                                 doseValueText: vm.doseValue.clean,
@@ -80,10 +118,10 @@ struct AddMedicationView: View {
                             )
                         }
                         .padding()
-
+                        
                         MomentField(selectedMoment: $vm.selectedMoment)
                         MealTimingField(isBeforeMeal: $vm.isBeforeMeal)
-
+                        
                         HStack(alignment: .top, spacing: 12) {
                             GenericPicker(
                                 title: "Fréquence",
@@ -113,7 +151,7 @@ struct AddMedicationView: View {
                         }
                         .padding(.horizontal)
                         .padding(.top, 8)
-
+                        
                         VStack(alignment: .leading, spacing: 12) {
                             Text("Notes (Optionnel)")
                                 .font(.custom("Inter", size: 16))
@@ -125,67 +163,28 @@ struct AddMedicationView: View {
                         .padding(.top, 16)
                         .padding(.bottom, 10)
                         
-
                     }
                 }
-                .padding()
-
                 // MARK: - Submit button
-                Button {
-                    guard vm.validate() else { return }
-                    addMedicationAction(
-                        vm.name,
-                        vm.doseValue,
-                        vm.selectedForm.rawValue,
-                        vm.startDate,
-                        vm.selectedMoment,
-                        vm.isBeforeMeal,
-                        vm.selectedFrequency,
-                        vm.notes,
-                        vm.reminderEnabled,
-                        vm.reminderTime
+                    .padding(.top, 10)
+                    .padding(.bottom, 30)
+                    .frame(maxWidth: .infinity)
+                    .background(
+                        RoundedCorner(radius: 45, corners: [.topLeft, .topRight])
+                            .fill(Color.aliceBlue)
                     )
-                    dismiss()
-                } label: {
-                    Text("Ajouter")
-                        .font(.custom("Poppins-Bold", size: 16))
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.icyBlue)
-                        .clipShape(Capsule())
-                }
-                .padding(20)
-                .alert("Erreur", isPresented: .constant(vm.currentError != nil)) {
-                    Button("OK", role: .cancel) { vm.currentError = nil }
-                } message: {
-                    switch vm.currentError {
-                    case .emptyName: Text("Veuillez entrer le nom du médicament")
-                    case .emptyDosage: Text("Veuillez ajouter un dosage")
-                    case .none: EmptyView()
-                    }
-                }
+                    .shadow(color: .gray.opacity(0.3), radius: 8, x: 0, y: -3)
             }
-            .padding(.top, 10)
-            .padding(.bottom, 30)
-            .frame(maxWidth: .infinity)
-            .background(
-                RoundedCorner(radius: 45, corners: [.topLeft, .topRight])
-                    .fill(Color.aliceBlue)
-            )
-            .shadow(color: .gray.opacity(0.3), radius: 8, x: 0, y: -3)
+            submitButton
+            .background(Color.aliceBlue)
         }
-        .background(Color.aliceBlue)
     }
-}
-
-
-
-// MARK: - Preview
-struct AddMedicationView_Previews: PreviewProvider {
-    static var previews: some View {
-        AddMedicationView { name, doseValue, form, date, moment, isBeforeMeal, frequency, notes, reminderEnabled, reminderTime in
-            print("""
+    
+    // MARK: - Preview
+    struct AddMedicationView_Previews: PreviewProvider {
+        static var previews: some View {
+            AddMedicationView { name, doseValue, form, date, moment, isBeforeMeal, frequency, notes, reminderEnabled, reminderTime in
+                print("""
             Médicament ajouté :
             - Nom : \(name)
             - Dosage : \(doseValue)
@@ -194,6 +193,7 @@ struct AddMedicationView_Previews: PreviewProvider {
             - Moment : \(moment.rawValue)
             - Avant repas : \(isBeforeMeal ? "Oui" : "Non")
             """)
+            }
         }
     }
 }

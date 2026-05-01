@@ -11,10 +11,21 @@ import CoreData
 struct PersistenceController {
     static let shared = PersistenceController()
     
+    // ✅ Ajoute ça
+    static let preview: PersistenceController = {
+        let controller = PersistenceController(inMemory: true)
+        return controller
+    }()
+    
     let container: NSPersistentContainer
     
-    init() {
+    init(inMemory: Bool = false) {
         container = NSPersistentContainer(name: "Medipills")
+        
+        if inMemory {
+            container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
+        }
+        
         container.loadPersistentStores { _, error in
             if let error = error {
                 fatalError("Erreur Core Data : \(error)")
@@ -26,4 +37,3 @@ struct PersistenceController {
         container.viewContext
     }
 }
-
