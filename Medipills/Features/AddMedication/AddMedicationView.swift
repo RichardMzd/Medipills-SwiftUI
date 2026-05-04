@@ -131,56 +131,34 @@ struct AddMedicationView: View {
                         }
                         .padding(.horizontal)
                         
-                        VStack(alignment: .leading, spacing: 12) {
-                            Toggle("Rappel", isOn: $vm.reminderEnabled)
-                                .font(.custom("Inter", size: 16))
-                                .foregroundColor(.dimGrey)
-                                .padding(.horizontal, 16)
-                                .tint(.icyBlue)
-                            
-                            if vm.reminderEnabled {
-                                DatePicker(
-                                    "Heure du rappel",
-                                    selection: $vm.reminderTime,
-                                    displayedComponents: .hourAndMinute
-                                )
-                                .font(.custom("Inter", size: 16))
-                                .foregroundColor(.dimGrey)
-                                .padding(.horizontal, 16)
-                            }
-                        }
-                        .padding(.horizontal)
-                        .padding(.top, 8)
+                        ReminderField(
+                            reminderEnabled: $vm.reminderEnabled,
+                            reminderTime: $vm.reminderTime
+                        )
                         
-                        VStack(alignment: .leading, spacing: 12) {
-                            Text("Notes (Optionnel)")
-                                .font(.custom("Inter", size: 16))
-                                .foregroundColor(.dimGrey)
-                                .padding(.leading, 16)
-                            NotesField(notes: $vm.notes)
-                        }
-                        .padding(.horizontal)
-                        .padding(.top, 16)
-                        .padding(.bottom, 10)
-                        
+                        NotesField(notes: $vm.notes)
+                         .padding(.horizontal)
+                         .padding(.top, 16)
+                         .padding(.bottom, 10)
                     }
                 }
+                
                 // MARK: - Submit button
-                    .padding(.top, 10)
-                    .padding(.bottom, 30)
-                    .frame(maxWidth: .infinity)
-                    .background(
-                        RoundedCorner(radius: 45, corners: [.topLeft, .topRight])
-                            .fill(Color.aliceBlue)
-                    )
-                    .shadow(color: .gray.opacity(0.3), radius: 8, x: 0, y: -3)
+                submitButton
             }
-            submitButton
-            .background(Color.aliceBlue)
+            .padding(.top, 10)
+            .padding(.bottom, 30)
+            .frame(maxWidth: .infinity)
+            .background(
+                RoundedCorner(radius: 45, corners: [.topLeft, .topRight])
+                    .fill(Color.aliceBlue)
+            )
+            .shadow(color: .gray.opacity(0.3), radius: 8, x: 0, y: -3)
         }
+        .background(Color.aliceBlue)
     }
+}
     
-    // MARK: - Preview
     struct AddMedicationView_Previews: PreviewProvider {
         static var previews: some View {
             AddMedicationView { name, doseValue, form, date, moment, isBeforeMeal, frequency, notes, reminderEnabled, reminderTime in
@@ -196,4 +174,4 @@ struct AddMedicationView: View {
             }
         }
     }
-}
+
